@@ -94,4 +94,3 @@ Explain how others can contribute to your project. Include guidelines for creati
 
 ---
 
-Feel free to expand each section, add more details, and insert visuals when you upload this to GitHub. Enhance it with GIFs, screenshots, and other graphics to make it visually appealing. Good luck with your project!
