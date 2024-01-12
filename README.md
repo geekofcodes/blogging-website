@@ -1,6 +1,6 @@
-# Blogging Website: YourProjectName
+# Blogging Website: Apex Archives
 
-![Apex Archives]
+!Apex Archives
 
 Welcome to Apex Archives - A Powerful Blogging Website
 
