@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom/cjs/react-router-dom'
 const Navbar = () => {
   return (
     <React.Fragment>
-        <nav className="bg-gray-800 p-4">
+        <nav className="bg-gray-800 px-20 py-4">
             <div className="container mx-auto flex items-center justify-between">
                 {/* Logo */}
                 <Link to="/" className="text-white text-xl font-bold">Apex Archives</Link>

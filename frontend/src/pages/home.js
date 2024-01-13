@@ -14,7 +14,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="mx-10 md:mx-20 mt-8">
+    <div className="mx-10 md:mx-20 mt-8 mb-8">
       <h1 className="text-3xl font-bold mb-4">Blogging Website</h1>
 
       {/* Display existing blog posts */}

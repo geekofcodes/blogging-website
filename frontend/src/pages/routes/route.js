@@ -5,6 +5,7 @@ import HomePage from '../home';
 import ViewPage from '../view';
 import Navbar from '../../components/navbar';
 import AboutPage from '../about';
+import Footer from '../../components/footer';
 
 const Routes = () => {
   return (
@@ -24,6 +25,7 @@ const Routes = () => {
               <HomePage />
             </Route>
           </Switch>
+        <Footer />
     </React.Fragment>
 
   );

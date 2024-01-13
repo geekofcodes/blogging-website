@@ -18,7 +18,7 @@ const ViewPage = () => {
   }
 
   return (
-    <div className="mx-20 m-8">
+    <div className="mx-10 md:mx-60 m-8">
       <h1 className="text-3xl font-bold mb-4 text-center">{post.title}</h1>
 
       {post.image && (
@@ -32,7 +32,7 @@ const ViewPage = () => {
         <p key={index} className="text-justify">{paragraph}</p>
       ))} */}
       {/* Render formatted HTML content */}
-      <div dangerouslySetInnerHTML={{ __html: post.content }} />
+      <div dangerouslySetInnerHTML={{ __html: post.content }}  />
 
       <p className="text-sm text-gray-500 mt-2">Author: {post.author}</p>
       <p className="text-sm text-gray-500">Created Date: {new Date(post.created_date).toLocaleDateString()}</p>

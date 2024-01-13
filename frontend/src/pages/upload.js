@@ -42,7 +42,7 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8 max-w-2xl bg-white p-8 rounded shadow-md">
+    <div className="container mx-auto mt-8 mb-8 max-w-2xl bg-white p-8 rounded shadow-md">
       <h1 className="text-3xl font-bold mb-6 text-center">Upload Blog Post</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
