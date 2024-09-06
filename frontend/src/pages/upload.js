@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { createPost } from '../service/Service';
+import postService from '../service/postService';
 
 const UploadPage = () => {
   const [newPost, setNewPost] = useState({
@@ -34,7 +34,7 @@ const UploadPage = () => {
     e.preventDefault();
 
     try {
-      await createPost(newPost);
+      await postService.createPost(newPost);
       resetForm();
     } catch (error) {
       console.error('Error handling submit:', error);

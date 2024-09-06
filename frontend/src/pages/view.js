@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom';// Assuming you are using React Router
-import { fetchPostById } from '../service/Service';
+import postService from '../service/postService';
 
 
 const ViewPage = () => {
@@ -8,8 +8,7 @@ const ViewPage = () => {
   const [post, setPost] = useState(null);
 
   useEffect(() => {
-    // Fetch the specific post by ID from the backend API
-    fetchPostById(postId)
+    postService.fetchPostById(postId)
     .then(data => {
       setPost(data)
       console.log(data)
@@ -31,10 +30,6 @@ const ViewPage = () => {
         </div>
       )}
 
-      {/* Render paragraphs individually */}
-      {/* {post.content.split('\n').map((paragraph, index) => (
-        <p key={index} className="text-justify">{paragraph}</p>
-      ))} */}
       {/* Render formatted HTML content */}
       <div dangerouslySetInnerHTML={{ __html: post.content }}  />
 

@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { fetchPosts } from '../service/Service';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { Button } from '@mui/material';
+import postService from '../service/postService';
 
 const HomePage = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    // Fetch posts from the backend API using the service
-    fetchPosts()
+    postService.fetchPosts()
       .then(data => {
         setPosts(data)
         console.log(data)
