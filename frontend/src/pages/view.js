@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom/cjs/react-router-dom';// Assuming you are using React Router
+import { fetchPostById } from '../service/Service';
+
 
 const ViewPage = () => {
   const { postId } = useParams();
@@ -7,10 +9,12 @@ const ViewPage = () => {
 
   useEffect(() => {
     // Fetch the specific post by ID from the backend API
-    fetch(`/api/posts/${postId}`)
-      .then(response => response.json())
-      .then(data => setPost(data.post))
-      .catch(error => console.error('Error fetching post:', error));
+    fetchPostById(postId)
+    .then(data => {
+      setPost(data)
+      console.log(data)
+    })
+    .catch(error => console.error('Error fetching post:', error));
   }, [postId]);
 
   if (!post) {

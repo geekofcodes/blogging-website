@@ -1,20 +1,31 @@
 // src/services.js
-
-const API_BASE_URL = 'http://localhost:5000/api';
+import { config } from "../config";
+const API_BASE_URL = config.base_url;
 
 const fetchPosts = async () => {
-  return fetch(`${API_BASE_URL}/posts`)
+  return fetch(`${API_BASE_URL}/api/posts`)
     .then(response => response.json())
-    .then(data => data.posts)
+    .then(data => data.data.posts)
     .catch(error => {
       console.error('Error fetching posts:', error);
       throw error;
     });
 };
 
+export const fetchPostById = async (postId) => {
+  const post_id = postId
+  return fetch(`${API_BASE_URL}/api/posts/${post_id}`)
+    .then(response => response.json())
+    .then(data => data.data.post)
+    .catch(error => {
+      console.error('Error fetching post:', error);
+      throw error;
+    })
+}
+
 export const createPost = async (newPost) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/create_post`, {
+    const response = await fetch(`${API_BASE_URL}/api/create_post`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +47,7 @@ export const createPost = async (newPost) => {
 };
 
 const login = async (credentials) => {
-  return fetch(`${API_BASE_URL}/login`, {
+  return fetch(`${API_BASE_URL}/api/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -56,7 +67,7 @@ const login = async (credentials) => {
 
 export const register = async (userData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/register`, {
+    const response = await fetch(`${API_BASE_URL}/api/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
