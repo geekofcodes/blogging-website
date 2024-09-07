@@ -53,7 +53,30 @@ const postService = {
             console.error('Error creating post:', error.message);
             throw error;
         }
+    },
+
+    updatePost: async (postId, updatedPost) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/posts/${postId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedPost),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update post');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error updating post:', error.message);
+            throw error;
+        }
     }
+
 };
 
 export default postService;
