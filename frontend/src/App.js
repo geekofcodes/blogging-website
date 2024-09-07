@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { fetchPosts } from './service/Service';
-import Routes from './pages/routes/route';
+import Routes from './routes/route';
 
 function App() {
   return (
