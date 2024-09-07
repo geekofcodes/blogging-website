@@ -3,6 +3,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import postService from '../../service/postService';
+import ScrollProgressBar from '../../components/scrollProgressBar';
+import BackToTopButton from '../../components/backToTop';
 
 const EditPage = () => {
     const { postId } = useParams();
@@ -13,12 +15,9 @@ const EditPage = () => {
         author: '',
         image: ''
     });
-
-    useEffect(() => {
-        postService.fetchPostById(postId)
-            .then(data => setPost(data))
-            .catch(error => console.error('Error fetching post:', error));
-    }, [postId]);
+    const [scrollProgress, setScrollProgress] = useState(0);
+    const [isScrolling, setIsScrolling] = useState(false);
+    const [showBackToTop, setShowBackToTop] = useState(false);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -36,8 +35,37 @@ const EditPage = () => {
             .catch(error => console.error('Error updating post:', error));
     };
 
+    const handleBackToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        postService.fetchPostById(postId)
+            .then(data => setPost(data))
+            .catch(error => console.error('Error fetching post:', error));
+    }, [postId]);
+
+    useEffect(() => {
+        // Scroll event listener for progress bar and back to top button
+        const handleScroll = () => {
+            const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const currentScroll = window.scrollY;
+            const scrollPercent = (currentScroll / totalScrollHeight) * 100;
+            setScrollProgress(scrollPercent);
+
+            setIsScrolling(currentScroll > 0);
+            setShowBackToTop(currentScroll > 300);
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [])
+
     return (
-        <div className="mx-10 md:mx-60 m-8">
+        <div className="mx-10 md:mx-60 m-8 relative">
+            <ScrollProgressBar scrollProgress={scrollProgress} isScrolling={isScrolling} />
+            <BackToTopButton showBackToTop={showBackToTop} handleBackToTop={handleBackToTop} />
             <h1 className="text-3xl font-bold mb-4 text-center">Edit Post</h1>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">

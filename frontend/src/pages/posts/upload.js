@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import postService from '../../service/postService';
+import ScrollProgressBar from '../../components/scrollProgressBar';
+import BackToTopButton from '../../components/backToTop';
 
 const UploadPage = () => {
   const [newPost, setNewPost] = useState({
@@ -11,6 +13,9 @@ const UploadPage = () => {
     created_date: '',
     image: '',
   });
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   const handleInputChange = (name, value) => {
     setNewPost({ ...newPost, [name]: value });
@@ -41,8 +46,31 @@ const UploadPage = () => {
     }
   };
 
+  const handleBackToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    // Scroll event listener for progress bar and back to top button
+    const handleScroll = () => {
+      const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const currentScroll = window.scrollY;
+      const scrollPercent = (currentScroll / totalScrollHeight) * 100;
+      setScrollProgress(scrollPercent);
+
+      setIsScrolling(currentScroll > 0);
+      setShowBackToTop(currentScroll > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [])
+
   return (
-    <div className="container mx-auto mt-8 mb-8 max-w-2xl bg-white p-8 rounded shadow-md">
+    <div className="container mx-auto mt-8 mb-8 max-w-2xl bg-white p-8 rounded shadow-md relative">
+      <ScrollProgressBar scrollProgress={scrollProgress} isScrolling={isScrolling} />
+      <BackToTopButton showBackToTop={showBackToTop} handleBackToTop={handleBackToTop} />
       <h1 className="text-3xl font-bold mb-6 text-center">Upload Blog Post</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
