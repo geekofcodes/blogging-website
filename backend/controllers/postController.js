@@ -1,5 +1,5 @@
 const Post = require('../models/postModel');
-const {handleSuccess, handleError} = require('../utils/responseHandlers')
+const { handleSuccess, handleError } = require('../utils/responseHandlers')
 
 // Get all posts
 exports.getPosts = async (req, res) => {
@@ -44,6 +44,30 @@ exports.createPost = async (req, res) => {
 
         await newPost.save();
         return handleSuccess(res, { post_id: newPost._id }, 201);
+    } catch (error) {
+        return handleError(res, error.message, 500);
+    }
+};
+
+// Update a post by ID
+exports.updatePost = async (req, res) => {
+    const { post_id } = req.params;
+    const { title, content, author, image } = req.body;
+
+    try {
+        const updatedPost = await Post.findByIdAndUpdate(post_id, {
+            title,
+            content,
+            author,
+            image,
+            modified_date: Date.now() // Set modified_date to current date
+        }, { new: true });
+
+        if (!updatedPost) {
+            return handleError(res, 'Post not found', 404);
+        }
+
+        return handleSuccess(res, { post: updatedPost }, 200);
     } catch (error) {
         return handleError(res, error.message, 500);
     }
