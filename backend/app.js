@@ -6,6 +6,7 @@ const connectDB = require('./config/database');
 // Import routes
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
+const commentRoutes = require('./routes/commentRoutes')
 
 // Initialize Express app
 const app = express();
@@ -26,6 +27,7 @@ app.use(session({
 // Routes
 app.use('/api', authRoutes);
 app.use('/api', postRoutes);
+app.use('/api', commentRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 7000;
