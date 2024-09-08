@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import postService from '../../service/postService';
-import ScrollProgressBar from '../../components/scrollProgressBar';
-import BackToTopButton from '../../components/backToTop';
+import React, { useState, useEffect } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import postService from "../../service/postService";
+import ScrollProgressBar from "../../components/scrollProgressBar";
+import BackToTopButton from "../../components/backToTop";
 
 const UploadPage = () => {
   const [newPost, setNewPost] = useState({
-    title: '',
-    content: '',
-    author: '',
-    created_date: '',
-    image: '',
+    title: "",
+    content: "",
+    author: "",
+    created_date: "",
+    image: "",
   });
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
@@ -27,11 +27,11 @@ const UploadPage = () => {
 
   const resetForm = () => {
     setNewPost({
-      title: '',
-      content: '',
-      author: '',
-      created_date: '',
-      image: '',
+      title: "",
+      content: "",
+      author: "",
+      created_date: "",
+      image: "",
     });
   };
 
@@ -42,18 +42,21 @@ const UploadPage = () => {
       await postService.createPost(newPost);
       resetForm();
     } catch (error) {
-      console.error('Error handling submit:', error);
+      console.error("Error handling submit:", error);
     }
   };
 
   const handleBackToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   useEffect(() => {
+    document.title = "Upload your Blog Post";
+
     // Scroll event listener for progress bar and back to top button
     const handleScroll = () => {
-      const totalScrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const totalScrollHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       const currentScroll = window.scrollY;
       const scrollPercent = (currentScroll / totalScrollHeight) * 100;
       setScrollProgress(scrollPercent);
@@ -62,15 +65,21 @@ const UploadPage = () => {
       setShowBackToTop(currentScroll > 300);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
 
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [])
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="container mx-auto mt-8 mb-8 max-w-2xl bg-white p-8 rounded shadow-md relative">
-      <ScrollProgressBar scrollProgress={scrollProgress} isScrolling={isScrolling} />
-      <BackToTopButton showBackToTop={showBackToTop} handleBackToTop={handleBackToTop} />
+      <ScrollProgressBar
+        scrollProgress={scrollProgress}
+        isScrolling={isScrolling}
+      />
+      <BackToTopButton
+        showBackToTop={showBackToTop}
+        handleBackToTop={handleBackToTop}
+      />
       <h1 className="text-3xl font-bold mb-6 text-center">Upload Blog Post</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -82,7 +91,7 @@ const UploadPage = () => {
             id="title"
             name="title"
             value={newPost.title}
-            onChange={(e) => handleInputChange('title', e.target.value)}
+            onChange={(e) => handleInputChange("title", e.target.value)}
             className="w-full border p-2 rounded"
             required
           />
@@ -108,7 +117,7 @@ const UploadPage = () => {
             id="author"
             name="author"
             value={newPost.author}
-            onChange={(e) => handleInputChange('author', e.target.value)}
+            onChange={(e) => handleInputChange("author", e.target.value)}
             className="w-full border p-2 rounded"
             required
           />
@@ -123,7 +132,7 @@ const UploadPage = () => {
             id="created_date"
             name="created_date"
             value={newPost.created_date}
-            onChange={(e) => handleInputChange('created_date', e.target.value)}
+            onChange={(e) => handleInputChange("created_date", e.target.value)}
             className="w-full border p-2 rounded"
             required
           />
@@ -138,7 +147,7 @@ const UploadPage = () => {
             id="image"
             name="image"
             value={newPost.image}
-            onChange={(e) => handleInputChange('image', e.target.value)}
+            onChange={(e) => handleInputChange("image", e.target.value)}
             className="w-full border p-2 rounded"
             required
           />
