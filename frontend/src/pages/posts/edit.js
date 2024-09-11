@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import postService from "../../service/postService";
@@ -8,7 +8,7 @@ import BackToTopButton from "../../components/backToTop";
 
 const EditPage = () => {
   const { postId } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [post, setPost] = useState({
     title: "",
     content: "",
@@ -32,7 +32,7 @@ const EditPage = () => {
     e.preventDefault();
     postService
       .updatePost(postId, post)
-      .then(() => history.push(`/view/${postId}`))
+      .then(() => navigate(`/view/${postId}`))
       .catch((error) => console.error("Error updating post:", error));
   };
 

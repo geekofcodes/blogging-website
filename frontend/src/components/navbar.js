@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom/cjs/react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation(); // Get the current route to highlight active link
