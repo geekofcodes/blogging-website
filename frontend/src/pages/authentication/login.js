@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { login } from '../../service/Service';
 
 const LoginPage = ({ setAuthenticated }) => {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -12,7 +12,7 @@ const LoginPage = ({ setAuthenticated }) => {
     login(credentials)
       .then(() => {
         setAuthenticated(true);
-        history.push('/'); // Redirect to the homepage after login
+        navigate('/'); // Redirect to the homepage after login
       })
       .catch(error => console.error('Error handling login:', error));
   };
