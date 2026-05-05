@@ -77,3 +77,6 @@ dump/
 config/*.key
 config/*.cert
 config/*.json
+
+# Environment variable files
+.env

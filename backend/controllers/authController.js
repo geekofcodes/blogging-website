@@ -1,51 +1,70 @@
-const bcrypt = require('bcrypt');
-const User = require('../models/userModel');
-const {handleSuccess, handleError} = require('../utils/responseHandlers')
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const User = require("../models/userModel");
+const { handleSuccess, handleError } = require("../utils/responseHandlers");
 
 // Register a new user
 exports.register = async (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    if (!username || !password) {
-        return handleError(res, 'Missing required fields', 400);
+  if (!username || !password) {
+    return handleError(res, "Missing required fields", 400);
+  }
+
+  try {
+    // Check if username exists
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return handleError(res, "Username already exists", 400);
     }
 
-    try {
-        // Check if username exists
-        const existingUser = await User.findOne({ username });
-        if (existingUser) {
-            return handleError(res, 'Username already exists', 400);
-        }
+    // Hash password and create user
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, password: hashedPassword });
 
-        // Hash password and create user
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const newUser = new User({ username, password: hashedPassword });
-
-        await newUser.save();
-        return handleSuccess(res, 'User registered successfully', 201);
-    } catch (error) {
-        return handleError(res, error.message, 500);
-    }
+    await newUser.save();
+    return handleSuccess(res, "User registered successfully", 201);
+  } catch (error) {
+    return handleError(res, error.message, 500);
+  }
 };
 
 // Login user
 exports.login = async (req, res) => {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    if (!username || !password) {
-        return handleError(res, 'Missing required fields', 400);
+  if (!username || !password) {
+    return handleError(res, "Missing required fields", 400);
+  }
+
+  try {
+    const user = await User.findOne({ username });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return handleError(res, "Invalid username or password", 401);
     }
 
-    try {
-        const user = await User.findOne({ username });
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            return handleError(res, 'Invalid username or password', 401);
-        }
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      process.env.JWT_SECRET, // Secret key from environment variable
+      { expiresIn: "1h" } // Token expires in 1 hour
+    );
 
-        // Add user session or generate a token
-        req.session.user_id = user._id;
-        return handleSuccess(res, 'Login successful', 200);
-    } catch (error) {
-        return handleError(res, error.message, 500);
-    }
+    // Add user session or generate a token
+    // req.session.user_id = user._id;
+    // return handleSuccess(res, 'Login successful', 200);
+    return handleSuccess(
+      res,
+      {
+        message: "Login successful",
+        token, // ✅ Include token in response
+        user: {
+          _id: user._id,
+          username: user.username,
+        },
+      },
+      200
+    );
+  } catch (error) {
+    return handleError(res, error.message, 500);
+  }
 };

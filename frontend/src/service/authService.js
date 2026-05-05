@@ -19,8 +19,7 @@ export const authService = {
             }
 
             const data = await response.json();
-            console.log(data.message);
-            return data.token; // Return the token if needed
+            return data.data.token;
         } catch (error) {
             console.error('Error logging in:', error.message);
             throw error;

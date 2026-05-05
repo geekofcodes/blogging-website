@@ -1,25 +1,26 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { TextField, Button } from "@mui/material";
 import { motion } from "framer-motion";
-import { login } from "../../service/Service";
+import { authService } from "../../service/authService";
+import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
 
-// Validation schema using Yup
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
 });
 
-const LoginPage = ({ setAuthenticated }) => {
+const LoginPage = () => {
   const navigate = useNavigate();
+  const { login: authLogin } = useContext(AuthContext);
 
   const handleLogin = (values, { setSubmitting }) => {
-    login(values)
-      .then(() => {
-        setAuthenticated(true);
-        navigate("/"); // Redirect to the homepage after login
+    authService.login(values)
+      .then((response) => {
+        authLogin(response); // Save token in context and localStorage
+        navigate("/"); // Redirect to homepage
       })
       .catch((error) => console.error("Error handling login:", error))
       .finally(() => setSubmitting(false));
@@ -42,34 +43,25 @@ const LoginPage = ({ setAuthenticated }) => {
         >
           {({ isSubmitting }) => (
             <Form className="space-y-4">
-              {/* Username Field */}
-              <div>
-                <Field
-                  name="username"
-                  as={TextField}
-                  label="Username"
-                  variant="outlined"
-                  fullWidth
-                  helperText={<ErrorMessage name="username" />}
-                  error={!!<ErrorMessage name="username" />}
-                />
-              </div>
-
-              {/* Password Field */}
-              <div>
-                <Field
-                  name="password"
-                  as={TextField}
-                  type="password"
-                  label="Password"
-                  variant="outlined"
-                  fullWidth
-                  helperText={<ErrorMessage name="password" />}
-                  error={!!<ErrorMessage name="password" />}
-                />
-              </div>
-
-              {/* Submit Button */}
+              <Field
+                name="username"
+                as={TextField}
+                label="Username"
+                variant="outlined"
+                fullWidth
+                helperText={<ErrorMessage name="username" />}
+                error={!!<ErrorMessage name="username" />}
+              />
+              <Field
+                name="password"
+                as={TextField}
+                type="password"
+                label="Password"
+                variant="outlined"
+                fullWidth
+                helperText={<ErrorMessage name="password" />}
+                error={!!<ErrorMessage name="password" />}
+              />
               <Button
                 type="submit"
                 variant="contained"
